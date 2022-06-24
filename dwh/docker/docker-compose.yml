@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  dwh:
+    build: .
+    image: oracle_instant_client_19.8-python_3.10.4_slim:1.0.0
+    container_name: DWH
+    restart: always
+    tty: true
+    volumes:
+      - ./etl:/app/etl
