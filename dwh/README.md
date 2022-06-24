@@ -272,7 +272,7 @@ venv\Scripts\activate
 python -m pip install --no-cache-dir -r requirements.txt
 ```
 
-8. Run etl.py 
+8. Run `etl.py`. 
 
 ```shell
 python etl.py
@@ -358,7 +358,7 @@ prefect agent local start
 flow.register(project_name = "your project name")
 ```
 
-14. Run etl.py 
+14. Run `etl.py`. 
 
 ```shell
 python etl.py
@@ -405,7 +405,7 @@ This is to execute the container in an interactive mode (`-it`) with the Bash sh
 source ~/.profile && source /app/venv/bin/activate
 ```
 
-9. Run etl.py 
+9. Run `etl.py`. 
 
 ```shell
 python etl.py
@@ -510,7 +510,7 @@ prefect agent local start
 flow.register(project_name = "your project name")
 ```
 
-15. Run etl.py 
+15. Run `etl.py`. 
 
 ```shell
 python etl.py
@@ -570,8 +570,8 @@ Make sure to run this command in the `file_path\project\dwh\local\etl` directory
 
 1. `libraries.py`: Imports all required libraries.
 2. `variables.py`: Stores all data warehouse names in target databases.
-3. `sql_queries.py`: Stores extract SQL queries in a list to query source databases and target table names in target databases.
-4. `flow.py`: Defines schedules with specific time zones for Prefect Scheduler and task dependencies for Prefect Flow
+3. `sql_queries.py`: Stores extract SQL queries in a list to query source databases.
+4. `flow.py`: Defines schedules with specific time zones for Prefect Scheduler and task dependencies for Prefect Flow.
 5. `db_credentials.py`: Stores all source and target databases credential information.
 6. `etl.py`: Includes extract(), transform(), and load() functions to carry out ETL processes.
 
@@ -598,7 +598,7 @@ def extract(query):
     :
 
 @prefect.task
-def transform(df):
+def transform(choice, df):
     :
 
 @prefect.task()
@@ -606,7 +606,7 @@ def load(load_table, df):
     :
 ```
 
-When running `etl.py`, Prefect tasks will be executed by following a specific Prefect flow in `flow.py`. The first task is to extract data from a source database and store data into a pandas dataframe with the `extract()` function in `extract.py`.
+When running `etl.py`, Prefect tasks will be executed by following a specific Prefect flow in `flow.py`. The first task is to extract data from a source database and store data into a pandas dataframe with the `extract()` function in `etl.py`.
 
 **Extract function**:
 
@@ -715,15 +715,18 @@ dt = datetime.datetime(2022, 5, 23, 9, 30, 0)
 schedule = Schedule(clocks = [IntervalClock(start_date = kl_tz.localize(dt, is_dst = True), interval = datetime.timedelta(minutes = 30))])
 ```
 
-We use the `pytz` Python library to assign the time zone of Kuala Lumpur, Malaysia to the `kl_tz` variable. We also use the `datetime` Python library here to parse the start date and the start time to the `dt` variable. Finally, the `schedule` variable stores relevant information with the Prefect Scheduler like when to start a Prefect flowand the interval for each execution of the Prefect flow. In this example, the interval for each execution of a Prefect flow is set to 30 minutes.
+We use the `pytz` Python library to assign the time zone of Kuala Lumpur, Malaysia to the `kl_tz` variable. We also use the `datetime` Python library here to parse the start date and the start time to the `dt` variable. Finally, the `schedule` variable stores relevant information with the Prefect Scheduler like when to start a Prefect flow and the interval for each execution of the Prefect flow. In this example, the interval for each execution of a Prefect flow is set to 30 minutes.
 
 You can add `schedule = schedule` in the `prefect.Flow()` function to automate the ETL data pipeline with a specific schedule.
 
 ```python
-def prefect_flow():
-    with prefect.Flow("etl_products", schedule = schedule) as flow:
-        :
-    return flow
+def prefect_flow(choice):
+    # outlet etl
+    if choice == "department":   
+        with prefect.Flow("etl_departments") as flow:
+            :
+        return flow
+     :        
 ```
 
 
@@ -778,7 +781,7 @@ Please key in your option or type exit to quit: department
 Execution time: 6.295316600007936 s
 ```
 
-You can see from the output the first task failed, and other tasks failed as well. With a Prefect trigger, a task will fail when the prior task failed. A task always depends on its upstream task. A short log message is generated to tell why such a task failed. You can use the link in the log message to troubleshoot possible errors in the Python script. In this example, we only need to fix this error in `extract()` since only the first task has an error. The error occurs because the wrong port number is passed to the `extract()` function. If the error occurs in the third task, then we need to fix this error in `load()`. This method efficiently reduces the scope of troubleshooting.
+You can see from the output the first task failed, and other tasks failed as well. With a Prefect trigger, a task will fail when the prior task failed. A task always depends on its upstream task. A short log message is generated to tell why such a task failed. You can use the link in the log message to troubleshoot possible errors in the Python script. In this example, we only need to fix this error in the `extract()` function since only the first task has an error. The error occurs because the wrong port number is passed to the `extract()` function. If the error occurs in the third task, then we need to fix this error in the `load()` function. This method efficiently reduces the scope of troubleshooting.
 
 
 ## [Optimizations](#optimizations)
@@ -794,7 +797,7 @@ def load(load_table, df):
         raise signals.FAIL(message = "Data load error. Error code: {}".format(error))
 ```
 
-Codes are also refactored into different Python modules to reduce duplicate codes. The 'multi' method is used in the `to_sql()` function to insert multiple values into the target database. By working with the actual ETL data pipeline, the chunksize is optimized with a value of `5000` to give the minimum execution time for extracting, transforming, and loading 315859 values from the Oracle database to the MariaDB Server database.
+Codes are also refactored into different Python modules to reduce duplicate codes. The `'multi'` method is used in the `to_sql()` function to insert multiple values into the target database. By working with the actual ETL data pipeline, the chunksize is optimized with a value of `5000` to give the minimum execution time for extracting, transforming, and loading 315859 values from the Oracle database to the MariaDB Server database.
 
 Results:
 
