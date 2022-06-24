@@ -22,7 +22,7 @@ Datawarehouse
 
 What is a data warehouse?
 
-![Data Warehouse Architecture]()
+![Data Warehouse Architecture](image/intro1.png)
 
 A data warehouse is a special type of data management system specifically designed to support business intelligence like data forecasting, data analysis, data mining, etc. A data warehouse must fulfill four unique characteristics:
 
@@ -59,7 +59,7 @@ Alternatively, we can also install Oracle and MariaDB Server databases on a sing
 
 **Run with a single local machine**
 
-![Run with a single local machine]()
+![Run with a single local machine](image/deploy1.png)
 
 * Oracle 11g Express Edition as a local database, Oracle Instant Client and SQLDeveloper
 * MariaDB Server 10.6.7[^1] as a local database
@@ -70,7 +70,7 @@ Alternatively, we can also install Oracle and MariaDB Server databases on a sing
 
 **Run with two machines**
 
-![Run with two machines]()
+![Run with two machines](image/deploy2.png)
 
 Computer A (*Remote Server*)
 * Oracle 11g Express Edition as a remote database
@@ -252,7 +252,7 @@ It is time to make our hands dirty. We will model a real-life data warehouse and
 
 **Deployed locally on a host machine**
 
-![Deployed locally on a host machine]()
+![Deployed locally on a host machine](image/deploy3.png)
 
 5. Open CMD as administrator with `file_path\project\dwh\local\etl` as the directory and run the following command to create a virtual environment:
 
@@ -302,7 +302,7 @@ deactivate
 
 **Deployed locally on a host machine with Prefect Cloud**
 
-![Deployed locally on a host machine with Prefect Cloud]()
+![Deployed locally on a host machine with Prefect Cloud](image/deploy4.png)
 
 :heavy_exclamation_mark: The Prefect server requires Docker and Docker Compose to be running.
 
@@ -378,7 +378,7 @@ deactivate
 
 **Deployed in a Docker container**
 
-![Deployed in a Docker container]()
+![Deployed in a Docker container](image/deploy5.png)
 
 5. Open CMD as administrator with `file_path\project\dwh\docker\etl` as the directory and run the following command to build, create and start a container:
 
@@ -448,7 +448,7 @@ docker-compose down
 
 **Deployed in a Docker container with Prefect Cloud**
 
-![Deployed in a Docker container with Prefect Cloud]()
+![Deployed in a Docker container with Prefect Cloud](image/deploy6.png)
 
 You need a Prefect Cloud account to use this deployment. You can create a Prefect Cloud account [here](https://universal.prefect.io/). After you have successfully created a Prefect Cloud account, do create an API key in account settings for authentication purposes. Copy and paste the API key name and the API key into `prefect_cloud.txt`.
 
