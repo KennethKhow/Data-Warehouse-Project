@@ -245,6 +245,8 @@ For a detailed explanation, please refer [here](https://blog.codetitans.pl/post/
 
 It is time to make our hands dirty. We will model a real-life data warehouse and ETL data pipelines as close as possible in this project :slightly_smiling_face:.
 
+https://user-images.githubusercontent.com/104199809/176194475-ef74f617-a54d-4dd7-b651-0431f17e3481.mp4
+
 1. Make a directory called `project`.
 2. Clone my GitHub repository into your `project` directory.
 3. Create a sample database with the `OT` user by running `OT_schema.sql` in SQL Developer.
